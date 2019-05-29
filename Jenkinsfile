@@ -7,7 +7,7 @@ pipeline {
         stage('build') {
             steps {
                 sh 'npm install'
-                sh 'node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file index.js --bundle-output /Users/wangliguang/Desktop/index.bundle'
+                sh 'node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file index.js --bundle-output /Users/wangliguang/Desktop/'
             }
         }
     }
