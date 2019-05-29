@@ -1,5 +1,5 @@
-FROM node:8.4
+FROM node:10.15.2
 COPY . /app
 WORKDIR /app
-RUN npm install --registry=https://registry.npm.taobao.org
+RUN npm install
 EXPOSE 3000
