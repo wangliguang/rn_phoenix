@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker 'node:10.15.2' }
+    agent { dockerfile true }
     environment {
         HOME = '.'
     }
