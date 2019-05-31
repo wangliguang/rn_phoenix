@@ -1,5 +1,0 @@
-FROM node:10.15.2
-COPY . /app
-WORKDIR /app
-USER root
-EXPOSE 3000
