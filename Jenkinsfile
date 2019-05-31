@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker 'jenins/jenkins' }
+    agent any
     environment {
         HOME = '.'
     }
