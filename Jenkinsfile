@@ -8,7 +8,8 @@ pipeline {
             steps {
                 sh 'yarn install'
                 sh 'rm -rf .cache/'
-                sh 'sudo node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file index.js --bundle-output ./index.bundle'
+                sh 'whoami'
+                sh 'node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file index.js --bundle-output ./index.bundle'
                 archiveArtifacts artifacts: './index.bundle', fingerprint: true, onlyIfSuccessful: true
             }
         }
