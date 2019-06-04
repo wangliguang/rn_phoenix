@@ -26,6 +26,7 @@
 		19ABB04A22A53252003A766A /* LoadBundleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19ABB04822A53252003A766A /* LoadBundleViewController.m */; };
 		19ABB04B22A53252003A766A /* LoadBundleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19ABB04922A53252003A766A /* LoadBundleViewController.xib */; };
 		19ABB07C22A5377A003A766A /* index.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 19ABB07B22A53779003A766A /* index.bundle */; };
+		19ABB07F22A54155003A766A /* WHCFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19ABB07E22A54155003A766A /* WHCFileManager.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -345,6 +346,8 @@
 		19ABB04822A53252003A766A /* LoadBundleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LoadBundleViewController.m; path = rn_phoenix/LoadBundleViewController.m; sourceTree = "<group>"; };
 		19ABB04922A53252003A766A /* LoadBundleViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LoadBundleViewController.xib; path = rn_phoenix/LoadBundleViewController.xib; sourceTree = "<group>"; };
 		19ABB07B22A53779003A766A /* index.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.bundle; sourceTree = "<group>"; };
+		19ABB07D22A54155003A766A /* WHCFileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WHCFileManager.h; path = rn_phoenix/WHCFileManager.h; sourceTree = "<group>"; };
+		19ABB07E22A54155003A766A /* WHCFileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WHCFileManager.m; path = rn_phoenix/WHCFileManager.m; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* rn_phoenix-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "rn_phoenix-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* rn_phoenix-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "rn_phoenix-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -501,6 +504,8 @@
 				19ABB04722A53252003A766A /* LoadBundleViewController.h */,
 				19ABB04822A53252003A766A /* LoadBundleViewController.m */,
 				19ABB04922A53252003A766A /* LoadBundleViewController.xib */,
+				19ABB07D22A54155003A766A /* WHCFileManager.h */,
+				19ABB07E22A54155003A766A /* WHCFileManager.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -1134,6 +1139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19ABB07F22A54155003A766A /* WHCFileManager.m in Sources */,
 				19ABB04A22A53252003A766A /* LoadBundleViewController.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,

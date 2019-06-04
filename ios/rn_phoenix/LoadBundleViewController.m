@@ -9,6 +9,7 @@
 #import "LoadBundleViewController.h"
 #import <React/RCTBridge.h>
 #import <React/RCTRootView.h>
+#import "WHCFileManager.h"
 
 @interface LoadBundleViewController ()
 
@@ -34,8 +35,8 @@
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     self.bundleFilePath = [documentsPath stringByAppendingPathComponent:response.suggestedFilename];
     NSLog(@"bundleFilePath====%@", self.bundleFilePath );
-    [[NSFileManager defaultManager] moveItemAtPath:location.path toPath:self.bundleFilePath error:nil];
-    
+    [WHCFileManager moveItemAtPath:location.path toPath:self.bundleFilePath overwrite:true];
+  
     dispatch_async(dispatch_get_main_queue(), ^{
       NSURL *jsCodeLocation = [NSURL URLWithString:self.bundleFilePath];
       RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation moduleProvider:nil launchOptions:nil];
@@ -49,5 +50,6 @@
   // 开始下载任务
   [downloadTask resume];
 }
+
 
 @end

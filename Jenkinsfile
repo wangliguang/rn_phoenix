@@ -10,7 +10,7 @@ pipeline {
                 sh 'rm -rf .cache/'
                 sh 'whoami'
                 sh 'node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file index.js --bundle-output ./index.bundle'
-                archiveArtifacts artifacts: 'index.bundle', fingerprint: true, onlyIfSuccessful: true
+                sh 'scp -r ./index.bundle.js root@http://47.94.81.19/root/bundle/'
             }
         }
     }
