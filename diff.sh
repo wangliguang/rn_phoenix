@@ -13,14 +13,14 @@ HTTP_CODE=`curl -o /dev/null -s --head -w "%{http_code}" "http://47.94.81.19:300
 
 if [ ${HTTP_CODE} -ne 200 ]
 then
+  # 原来不存在bundle
+  scp $localNewFile $remoteNewFile
+  diff $localNewFile $localNewFile > $remoteDiffFile
+else
   # 原来存在bundle
   scp $remoteNewFile $localOldFile
   scp $localOldFile $remoteOldFile
   scp $localNewFile $remoteNewFile
 
   diff $localNewFile $localOldFile > $remoteDiffFile
-else
-  # 原来不存在bundle
-  scp $localNewFile $remoteNewFile
-  diff $localNewFile $localNewFile > $remoteDiffFile
 fi
