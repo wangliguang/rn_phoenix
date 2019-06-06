@@ -27,7 +27,7 @@
 }
 
 - (void)downLoadBundle {
-  NSURL *url = [NSURL URLWithString:@"http://47.94.81.19:3000/bundle/index.bundle"];
+  NSURL *url = [NSURL URLWithString:@"http://47.94.81.19:3000/bundle/new.bundle"];
 //  NSURL *url = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"bundle"];
   NSURLSession *session = [NSURLSession sharedSession];
   NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
