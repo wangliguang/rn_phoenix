@@ -15,12 +15,14 @@ if [ ${HTTP_CODE} -ne 200 ]
 then
   # 原来不存在bundle
   scp $localNewFile $remoteNewFile
-  diff $localNewFile $localNewFile > $remoteDiffFile
+  diff $localNewFile $localNewFile > $localDiffFile
+  scp $localDiffFile $remoteDiffFile
 else
   # 原来存在bundle
   scp $remoteNewFile $localOldFile
   scp $localOldFile $remoteOldFile
   scp $localNewFile $remoteNewFile
 
-  diff $localNewFile $localOldFile > $remoteDiffFile
+  diff $localNewFile $localOldFile > $localDiffFile
+  scp $localDiffFile $remoteDiffFile
 fi
