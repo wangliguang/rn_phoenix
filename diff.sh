@@ -1,14 +1,12 @@
 #! /bin/bash
 
-
 localNewFile='./index.bundle'
-
-cd ./bundle
-touch $localNewFile
-mv $localNewFile `date +"%s".bundle`
-count=`ls -l | grep "^-" | wc -l`
-echo $count
+# 已时间戳为文件名
+newName=`date +"%s".bundle`;
+scp $localNewFile root@47.94.81.19:/app/s_phoenix/public/bundle/$newName
+count=`ssh root@47.94.81.19 "cd /app/s_phoenix/public/bundle && ls -l | grep "^-" | wc -l"`
 if [  $count -gt 8 ]; then
-    oldFile=`ls -t * | tail -1`
-    rm $oldFile
+    oldFile=`ssh root@47.94.81.19 "cd /app/s_phoenix/public/bundle && ls -t * | tail -1"`
+    echo $oldFile
+    ssh root@47.94.81.19 "rm /app/s_phoenix/public/bundle/${oldFile}" 
 fi
