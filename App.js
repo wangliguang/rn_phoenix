@@ -25,6 +25,7 @@ export default class App extends Component<Props> {
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
         <Text>第一阶段好像结束了哎</Text>
+        <Text>差分难道也可以了？</Text>
       </View>
     );
   }

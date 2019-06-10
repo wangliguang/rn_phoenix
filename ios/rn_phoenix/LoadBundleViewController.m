@@ -10,11 +10,11 @@
 #import <React/RCTBridge.h>
 #import <React/RCTRootView.h>
 #import "WHCFileManager.h"
+#import "DiffMatchPatch.h"
 
 @interface LoadBundleViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *bundleStatusText;
-@property (nonatomic, copy) NSString *bundleFilePath;
 
 @end
 
@@ -40,44 +40,70 @@
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
     NSLog(@"jsonDict %@", jsonDict);
     if(jsonDict[@"bundleUrl"]) {
-      [self downLoadBundle:jsonDict[@"bundleUrl"]];
+      [self downLoadBundle:jsonDict[@"bundleUrl"] version:jsonDict[@"version"]];
     };
     
     if(jsonDict[@"patchUrl"]) {
-      [self downLoadPatch:jsonDict[@"patchUrl"]];
+      [self downLoadPatch:jsonDict[@"patchUrl"] version:jsonDict[@"version"]];
     };
   }] resume];
   
 }
 
-- (void)downLoadPatch:(NSString *)urlStr {
-  
-}
-
-- (void)downLoadBundle:(NSString *)urlStr {
+- (void)downLoadPatch:(NSString *)urlStr version: (NSString *)currentBundleVersion {
   NSURL *url = [NSURL URLWithString:urlStr];
-//  NSURL *url = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"bundle"];
   NSURLSession *session = [NSURLSession sharedSession];
-  NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+  [[session downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
     
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    self.bundleFilePath = [documentsPath stringByAppendingPathComponent:response.suggestedFilename];
-    NSLog(@"bundleFilePath====%@", self.bundleFilePath );
-    [WHCFileManager moveItemAtPath:location.path toPath:self.bundleFilePath overwrite:true];
-  
-    dispatch_async(dispatch_get_main_queue(), ^{
-      NSURL *jsCodeLocation = [NSURL URLWithString:self.bundleFilePath];
-      RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation moduleProvider:nil launchOptions:nil];
-      
-      RCTRootView* view = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"rn_phoenix" initialProperties:nil];
-      NSString *currentBundleVersion = [[urlStr lastPathComponent] componentsSeparatedByString:@"."][0];
-      [[NSUserDefaults standardUserDefaults] setObject:currentBundleVersion forKey:CURRENT_BUNDLE_VERSION];
-      self.view = view;
-    });
-  }];
-  
-  // 开始下载任务
-  [downloadTask resume];
+    NSString *patchFilePath = [documentsPath stringByAppendingPathComponent:@"diff.pat"];
+    [WHCFileManager moveItemAtPath:location.path toPath:patchFilePath overwrite:true];
+    [self benginPatch:patchFilePath version:currentBundleVersion];
+  }] resume];
+}
+
+- (void)benginPatch:(NSString *)patchesPath version: (NSString *)currentBundleVersion {
+  NSString *path01 = [self getBundlePath];
+  NSLog(@"path %@", [self getBundlePath]);
+  NSData *data01 = [NSData dataWithContentsOfFile:path01];
+  NSString *str01 = [[NSString alloc] initWithData:data01 encoding:NSUTF8StringEncoding];
+  DiffMatchPatch *patch = [[DiffMatchPatch alloc]init];
+  NSData *patchesData = [NSData dataWithContentsOfFile:patchesPath];
+  NSLog(@"bundleFilePath====%@", [self getBundlePath] );
+  NSString *patchesStr = [[NSString alloc]initWithData:patchesData encoding:NSUTF8StringEncoding];
+  NSMutableArray *patchesArr = [patch patch_fromText:patchesStr error:nil];
+  NSArray *newArray = [patch patch_apply:patchesArr toString:str01];
+  BOOL isTrue = [newArray[0] writeToFile:[self getBundlePath] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+  if (!isTrue) {
+    NSLog(@"写入失败");
+    return;
+  }
+  [self mainQueueUpdateUI:currentBundleVersion];
+}
+
+- (void)downLoadBundle:(NSString *)urlStr version:(NSString *)currentBundleVersion {
+  NSURL *url = [NSURL URLWithString:urlStr];
+  NSURLSession *session = [NSURLSession sharedSession];
+  [[session downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+    [WHCFileManager moveItemAtPath:location.path toPath:[self getBundlePath] overwrite:true];
+    [self mainQueueUpdateUI:currentBundleVersion];
+  }] resume];
+}
+
+- (void) mainQueueUpdateUI: (NSString *)currentBundleVersion {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    NSURL *jsCodeLocation = [NSURL URLWithString:[self getBundlePath]];
+    RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation moduleProvider:nil launchOptions:nil];
+    RCTRootView* view = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"rn_phoenix" initialProperties:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:currentBundleVersion forKey:CURRENT_BUNDLE_VERSION];
+    self.view = view;
+  });
+}
+
+- (NSString *)getBundlePath {
+  NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+  NSString *bundleFilePath = [documentsPath stringByAppendingPathComponent:@"index.bundle"];
+  return bundleFilePath;
 }
 
 
