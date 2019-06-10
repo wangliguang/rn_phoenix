@@ -18,16 +18,44 @@
 
 @end
 
+#define CURRENT_BUNDLE_VERSION @"current_bundle_version"
+
 @implementation LoadBundleViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-  [self downLoadBundle];
+  
+  NSURLSession *session = [NSURLSession sharedSession];
+  NSString* currentBundleVersion = [[NSUserDefaults standardUserDefaults] valueForKey:CURRENT_BUNDLE_VERSION];
+  
+  if (!currentBundleVersion) {
+    currentBundleVersion = @"0";
+  }
+  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://47.94.81.19:3000/users/getPatch?currentBundleVersion=%@", currentBundleVersion]];
+  [[session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    if (error) {
+      NSLog(@"getPatch_error=%@", error);
+      return;
+    }
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"jsonDict %@", jsonDict);
+    if(jsonDict[@"bundleUrl"]) {
+      [self downLoadBundle:jsonDict[@"bundleUrl"]];
+    };
+    
+    if(jsonDict[@"patchUrl"]) {
+      [self downLoadPatch:jsonDict[@"patchUrl"]];
+    };
+  }] resume];
   
 }
 
-- (void)downLoadBundle {
-  NSURL *url = [NSURL URLWithString:@"http://47.94.81.19:3000/bundle/new.bundle"];
+- (void)downLoadPatch:(NSString *)urlStr {
+  
+}
+
+- (void)downLoadBundle:(NSString *)urlStr {
+  NSURL *url = [NSURL URLWithString:urlStr];
 //  NSURL *url = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"bundle"];
   NSURLSession *session = [NSURLSession sharedSession];
   NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
@@ -42,7 +70,8 @@
       RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation moduleProvider:nil launchOptions:nil];
       
       RCTRootView* view = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"rn_phoenix" initialProperties:nil];
-      
+      NSString *currentBundleVersion = [[urlStr lastPathComponent] componentsSeparatedByString:@"."][0];
+      [[NSUserDefaults standardUserDefaults] setObject:currentBundleVersion forKey:CURRENT_BUNDLE_VERSION];
       self.view = view;
     });
   }];
