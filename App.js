@@ -24,8 +24,7 @@ export default class App extends Component<Props> {
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
-        <Text>第一阶段好像结束了哎</Text>
-        <Text>差分第N+3次测试</Text>
+        <Text>跨版本差分完成</Text>
       </View>
     );
   }
