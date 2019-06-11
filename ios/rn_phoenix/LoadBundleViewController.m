@@ -11,7 +11,7 @@
 #import <React/RCTRootView.h>
 #import "WHCFileManager.h"
 #import "DiffMatchPatch.h"
-
+#import <Foundation/NSObject.h>
 @interface LoadBundleViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *bundleStatusText;
@@ -27,11 +27,10 @@
   
   NSURLSession *session = [NSURLSession sharedSession];
   NSString* currentBundleVersion = [[NSUserDefaults standardUserDefaults] valueForKey:CURRENT_BUNDLE_VERSION];
-  
   if (!currentBundleVersion) {
     currentBundleVersion = @"0";
   }
-  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://47.94.81.19:3000/users/getPatch?currentBundleVersion=%@", currentBundleVersion]];
+  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://10.36.36.31:3000/users/getPatch?currentBundleVersion=%@", currentBundleVersion]];
   [[session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
     if (error) {
       NSLog(@"getPatch_error=%@", error);
